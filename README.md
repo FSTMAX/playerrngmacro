@@ -26,7 +26,7 @@ If you don't have Python installed on your system, follow these steps:
 - Inside the extracted project folder, locate the "Setup.py" file.
 - Double-click on "Setup.py" to launch the setup process.
 - Close the window after installation of requirements is done.
-- For the last open "Scanner.py" to use the macro.
+- For the last step, open "Scanner.py" to use the macro.
 
 ## Usage
 
