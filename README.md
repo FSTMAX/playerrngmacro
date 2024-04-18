@@ -1,4 +1,4 @@
-# Player RNG Advanced Macro by @FSTMAX v1.0 (Windows only)
+# Player RNG Advanced Macro by @FSTMAX v1.1 (Windows only)
 
 ## Installation Guide
 
