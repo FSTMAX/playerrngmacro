@@ -16,6 +16,8 @@ If you don't have Python installed on your system, follow these steps:
 
 ### 3. Install Tesseract OCR
 
+If you don't have Tesseract OCR installed on your system, follow these steps:
+
 - Install Tesseract OCR from official GutHub page [here](https://github.com/UB-Mannheim/tesseract/wiki)
 - Navigate to the extracted project folder and locate the "tesseract-ocr-w64-setup.exe" file.
 - Open "tesseract-ocr-w64-setup.exe" to start the installation.
