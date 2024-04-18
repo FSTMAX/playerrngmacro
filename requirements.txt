@@ -1,5 +1,6 @@
 discord-webhook
-pillow
+Pillow
 pygetwindow
 pytesseract
 requests
+pyautogui
