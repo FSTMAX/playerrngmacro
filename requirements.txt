@@ -1,5 +1,5 @@
 discord-webhook
-Pillow
+pillow
 pygetwindow
 pytesseract
 requests
