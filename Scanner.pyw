@@ -1,6 +1,6 @@
 try:
 	from tkinter import *
-	from PIL import Image, ImageGrab
+	from PIL import Image
 	from discord_webhook import DiscordWebhook, DiscordEmbed
 	import threading
 	import pygetwindow as gw
