@@ -36,3 +36,15 @@ If you don't have Tesseract OCR installed on your system, follow these steps:
 
 The macro is designed to function across most of screen resolutions and different Roblox window resolutions. During the use, ensure that the Roblox window is positioned on top of all other applications, and the player ID is fully visible without any obstructions. 
 If you have feedback or any issues, please contact @fstmax on Discord.
+
+# Release Notes
+
+## Version 1.1 (19/04/2024)
+
+### New Features
+- Crash Log: In the event of an unexpected crash, the application now logs the error into a file, which can be reported to the developer.
+- Update Notification: Users will now receive in-app notifications for new version releases, allowing for convenient updates.
+
+### Bug Fixes
+- Fixed an issue where images would fail to scan properly.
+- Fixed a bug causing incomplete scanning of player IDs.
