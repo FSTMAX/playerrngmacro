@@ -82,6 +82,27 @@ try:
 		groups = [numberStr[i:i+3] for i in range(0, len(numberStr), 3)]
 	
 		return ','.join(groups)[::-1]
+
+	def getVersion(url):
+		owner = url.split('/')[-2]
+		repoName = url.split('/')[-1]
+
+		try:
+			response = requests.get(f"https://api.github.com/repos/{owner}/{repoName}")
+			if response.status_code == 200:
+				description = response.json().get('description', 'No description available')
+				version = float(description.split(" ")[-1].split("v")[1])
+				return version
+			else:
+				return f"Failed to retrieve repository information. Status code: {response.status_code}"
+		except Exception as E:
+			print(E)
+
+	def updateVersion():
+		webbrowser.open("https://github.com/FSTMAX/playerrngmacro")
+
+	def quitUpdateWin():
+		updateWin.destroy()
 	
 	def donate():
 		def donoRedirect(donoBtId):
@@ -160,26 +181,28 @@ try:
 	def loop():
 		if running:
 			try:
-				def boneStickWickyIWannaSeeItJiggleYuhh():
-					try:
-						targetWindow = [window for window in gw.getAllTitles() if "roblox" in window.lower()]
-						
-						if targetWindow:
-							window = gw.getWindowsWithTitle(targetWindow[0])[0]
-	
-							left, top, width, height = window.left, window.top, window.width, window.height
-	
-							img = pyautogui.screenshot(region=(left, top, width, height))
-							w = int(img.size[0]/1.5)
-	
-							hsize = int((float(img.size[1]) * float((w / float(img.size[0])))))
-							img = img.resize((w, hsize), Image.Resampling.LANCZOS)
-							img.save('Assets\\screenshot.png')
-						else:
-							Log("Roblox not found.")
-					except Exception as e:
-						log(f"Error: {e}")
-	
+				def boneStickWickyIWannaSeeItJiggleYuhh(error):
+					def get360NoscopedEz():
+						try:
+							targetWindow = [window for window in gw.getAllTitles() if "roblox" in window.lower()]
+							
+							if targetWindow:
+								window = gw.getWindowsWithTitle(targetWindow[0])[0]
+		
+								left, top, width, height = window.left, window.top, window.width, window.height
+		
+								img = pyautogui.screenshot(region=(left, top, width, height))
+								w = int(img.size[0]/1.5)
+		
+								hsize = int((float(img.size[1]) * float((w / float(img.size[0])))))
+								img = img.resize((w, hsize), Image.Resampling.LANCZOS)
+								img.save('Assets\\screenshot.png')
+							else:
+								Log("Roblox not found.")
+						except Exception as e:
+							log(f"Error: {e}")
+					get360NoscopedEz()
+					
 					img = Image.open("Assets\\screenshot.png")
 	
 					width, height = img.size
@@ -199,11 +222,17 @@ try:
 	
 						idAreaWidthList = []
 						widthHalf = centerX
-	
+						noBlue = 0
+
 						for pixel in range(width // 4):
 							pixelRgb = img.convert('RGB').getpixel((widthHalf, idAreaHeightList[0]))
 							if pixelRgb == (0, 166, 255):
 								idAreaWidthList.append(pixel)
+								noBlue = 0
+							else:
+								noBlue += 1
+							if noBlue >= pyautogui.size()[1]//54:
+								break
 							widthHalf -= 1
 	
 						idAreaHeight = idAreaHeightList[-1] - idAreaHeightList[0]
@@ -213,8 +242,16 @@ try:
 						right = centerX + idAreaWidthList[-1] + idAreaHeight // 2
 						top = idAreaHeightList[0]
 						bottom = idAreaHeightList[-1]
-	
-						img.crop((left, top, right, bottom)).save("Assets\\cell#id.png")
+
+						try:
+							img.crop((left, top, right, bottom)).save("Assets\\cell#id.png")
+						except Exception as E:
+							print(E)
+							log("Image fail. Retrying...")
+							if not error:
+								get360NoscopedEz()
+								boneStickWickyIWannaSeeItJiggleYuhh(1)
+							return
 	
 						top += idAreaHeight
 						bottom += idAreaHeight
@@ -254,7 +291,7 @@ try:
 							userId = ''.join(char for char in rawUserId if char.isdigit())
 	
 							if userId == "":
-								print("Retrying")
+								print("Retrying as bw")
 								Image.open("Assets\\cell#id.png").convert('L').save("Assets\\cell#id.png")
 								rawUserId = pytesseract.image_to_string(Image.open("Assets\\cell#id.png")).replace("\n", "")
 								userId = ''.join(char for char in rawUserId if char.isdigit())
@@ -274,9 +311,11 @@ try:
 								
 							if userFollowersResponse.status_code == 200:
 								userFollowers = commify(userFollowersData.get("count"))
-	
+							
+							if error:
+								log("Success")
 							log(f"Rolled {rarity}\nID: {userId}")
-	
+
 							data = ""
 	
 							if rarity in pingAllowed:
@@ -334,15 +373,15 @@ try:
 							webhook.content = str(data)
 	
 							webhook.execute()
-	
+
 				if threading.active_count() == 1:
-					thread = threading.Thread(target=boneStickWickyIWannaSeeItJiggleYuhh)
+					thread = threading.Thread(target=boneStickWickyIWannaSeeItJiggleYuhh, args=(0,))
 					thread.start()
-				
+
 			except Exception as E:
 				log(f"Error: {E}")
-	
-			win.after(100, loop)
+
+			win.after(1, loop)
 	
 	class PlaceholderEntry(Entry):
 		def __init__(self, master=None, placeholder="", color='grey', **kwargs):
@@ -371,9 +410,10 @@ try:
 	
 	win = Tk()
 	win.iconbitmap('Assets\\BloxyCola.ico')
-	win.title("Player RNG Advanced Macro by @FSTMAX v1.0")
+	title = "Player RNG Advanced Macro by @FSTMAX v1.1"
+	win.title(title)
 	win.configure(background="#efebe7")
-	
+
 	sWidth = win.winfo_screenwidth()
 	sHeight = win.winfo_screenheight()
 	
@@ -444,10 +484,10 @@ try:
 		checkbox.place(x=405, y=yOffset)
 		yOffset += 20
 	
-	startBt = Button(win, text="Start", width=14, height=1, bg="#b5ffb9", font=("Arial", 8), command=start)
+	startBt = Button(win, text="Start", width=14, height=1, bg="#b5ffb9", font="Arial 8", command=start)
 	startBt.place(x=492, y=195)
 	
-	statusLb = Label(win, text="Enter webhook", font=("Arial", 8), bg="#efebe7")
+	statusLb = Label(win, text="Enter webhook", font="Arial 8", bg="#efebe7")
 	statusLb.place(x=492, y=176)
 	
 	if settingsData.get("webhookUrl", "") != "":
@@ -465,7 +505,7 @@ try:
 	pingLb = Label(win, text="Ping:", font='Arial 10 bold', bg="#efebe7")
 	pingLb.place(x=405, y=46)
 	
-	discordIdTe = PlaceholderEntry(win, width=22, font=("Arial", 10), bg="white", placeholder="Discord user id...")
+	discordIdTe = PlaceholderEntry(win, width=22, font="Arial 10", bg="white", placeholder="Discord user id...")
 	discordIdTe.place(x=449, y=49)
 	
 	if settingsData.get("userId", "") != "":
@@ -474,19 +514,42 @@ try:
 		discordIdTe.config(fg="#000")
 	
 	robuk = PhotoImage(file="Assets\\robuk.png")
-	donoWinBt = Button(win, image=robuk, width=19, height=19, bg="#000", font=("Arial", 8), command=donate)
+	donoWinBt = Button(win, image=robuk, width=19, height=19, bg="#000", font="Arial 8", command=donate)
 	donoWinBt.place(x=585, y=195)
 	
+	currentVersion = float(title.split(" ")[-1].split("v")[1])
+	newVersion = getVersion("https://github.com/FSTMAX/playerrngmacro")
+
+	if newVersion > currentVersion:
+		updateWin = Tk()
+		updateWin.iconbitmap('Assets\\BloxyCola.ico')
+		updateWin.title("New version available!")
+		updateWin.configure(background="#efebe7")
+		updateWin.geometry(f"400x200+{sWidth//2-310}+{sHeight//2-115}")
+		updateWin.resizable(False, False)
+
+		justsometextLb = Label(updateWin, text=f"New version v{newVersion} is available!", font="Arial 15", bg="#efebe7")
+		justsometextLb.place(x=68, y=50)
+
+		updateBt = Button(updateWin, text="Update", width=8, height=1, bg="#b5ffb9", font="Arial 17 bold", command=updateVersion)
+		updateBt.place(x=75, y=100)
+		
+		nuhuhBt = Button(updateWin, text="Nah", width=8, height=1, bg="#f54242", fg="#fff", font="Arial 17 bold", command=quitUpdateWin)
+		nuhuhBt.place(x=205, y=100)
+
+
 	log("Preparing...")
 	
 	user = os.path.expanduser('~').split("\\")[2]
 	pytesseract.pytesseract.tesseract_cmd = f"C:\\Users\\{user}\\AppData\\Local\\Programs\\Tesseract-OCR\\tesseract.exe"
 	
 	log("Ready")
-	
+
 	import pyautogui
-	
+
 	win.mainloop()
+
 except Exception as E:
 	print(E)
-	input()
+	with open("Crashes.txt", "w") as file:
+		file.writelines(f"{E}\n\nIf you cannot resolve the issue, please contact @fstmax on discord!")
